@@ -1,9 +1,9 @@
+import Cadastro from "./Cadastro";
+
 function App() {
   return (
     <div className="App">
-      <header>
-          Hello World
-      </header>
+      <Cadastro></Cadastro>
     </div>
   );
 }
