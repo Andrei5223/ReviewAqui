@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
 
+axios.defaults.baseURL = "http://localhost:3010/";
+
 export default function Cadastro() {
 
   const [nome, setNome] = React.useState("");
