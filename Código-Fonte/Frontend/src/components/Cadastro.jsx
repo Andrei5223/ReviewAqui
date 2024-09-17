@@ -46,6 +46,18 @@ const isEmailValid = (email) => {
     if (nome !== "" && email !== "" && senha !== "") {
       try {
 
+        if (nome.length < 3 ) {
+          setMessageText("Minímo de 3 caracteres para nome.");
+          setMessageSeverity("warning");
+          setOpenMessage(true);
+          return;
+        }
+        if (senha.length < 8) {
+          setMessageText("Minímo de 8 caracteres para senha.");
+          setMessageSeverity("warning");
+          setOpenMessage(true);
+          return;
+        }
 
         if (!isEmailValid(email)) {
           setMessageText("E-mail Inválido!");
