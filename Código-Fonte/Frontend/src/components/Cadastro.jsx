@@ -133,6 +133,7 @@ const isEmailValid = (email) => {
               variant="filled"
               onChange={(e) => setNome(e.target.value)}
               value={nome}
+              inputProps={{ maxLength: 50 }}
               />
             <TextField 
               id="filled-basic" 
@@ -141,6 +142,7 @@ const isEmailValid = (email) => {
               variant="filled"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
+              inputProps={{ maxLength: 50 }}
             />
             <TextField 
               id="filled-basic" 
@@ -150,6 +152,7 @@ const isEmailValid = (email) => {
               variant="filled"
               onChange={(e) => setSenha(e.target.value)}
               value={senha}
+              inputProps={{ maxLength: 30 }}
             />
             
             <Stack direction="row" spacing={3}>
