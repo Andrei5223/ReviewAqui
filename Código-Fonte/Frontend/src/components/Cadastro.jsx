@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Snackbar, Alert } from '@mui/material';
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3010/";
@@ -16,11 +17,25 @@ export default function Cadastro() {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
 
+  // Variáveis para a SnackBar
+  const [openMessage, setOpenMessage] = React.useState(false);
+  const [messageText, setMessageText] = React.useState("");
+  const [messageSeverity, setMessageSeverity] = React.useState("success");
+
   function clearForm() {
     setNome("");
     setEmail("");
     setSenha("");
   }
+
+  function handleCancelClick() {
+    if (nome !== "" || email !== "") {
+        setMessageText("Cadastro cancelado!");
+        setMessageSeverity("warning");
+        setOpenMessage(true);
+    }
+    clearForm();
+}
 
   async function handleSubmit() {
 
@@ -32,12 +47,30 @@ export default function Cadastro() {
               senha: senha,
           });
           console.log(`Nome: ${nome} - Email: ${email}`);
+          setMessageText("Cadastrado com sucesso!");
+          setMessageSeverity("success");
           clearForm(); // limpa o formulário apenas se cadastrado com sucesso
       } catch (error) {
           console.log(error);
+          setMessageText("Falha no cadastro!");
+          setMessageSeverity("error");
+      } finally {
+        setOpenMessage(true);
       }
+    } else {
+      setMessageText("Dados inválidos!");
+      setMessageSeverity("warning");
+      setOpenMessage(true);
     }
   }
+
+  //Snackbar
+  function handleCloseMessage(_, reason) {
+    if (reason === "clickaway") {
+        return;
+    }
+    setOpenMessage(false);
+}
 
   return (
     <Box
@@ -78,9 +111,9 @@ export default function Cadastro() {
         <CardContent>
 
           <Stack spacing={3} direction="column">
-        <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-            Crie Sua Conta
-        </Typography>
+            <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
+                Crie Sua Conta
+            </Typography>
             <TextField 
               id="filled-basic" 
               label="Nome" 
@@ -106,11 +139,49 @@ export default function Cadastro() {
               onChange={(e) => setSenha(e.target.value)}
               value={senha}
             />
-          <Button variant="contained" sx={{ mt: 2, backgroundColor: '#68fcad', color: 'black', maxWidth: '100px'}} onClick={handleSubmit}>Cadastrar</Button>
+            
+            <Stack direction="row" spacing={3}>
+              <Button
+                variant="contained"
+                sx={{ mt: 2, 
+                      backgroundColor: '#68fcad', 
+                      color: 'black', 
+                      maxWidth: '100px'
+                    }} 
+                onClick={handleSubmit}
+              >
+                  Cadastrar
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{ mt: 2, 
+                      maxWidth: '100px'
+                    }} 
+                onClick={handleCancelClick}
+              >
+                  Cancelar
+              </Button>
+            </Stack>
+
           </Stack>
         </CardContent>
       </Card>
     </Stack>
+
+    <Snackbar
+      open={openMessage}
+      autoHideDuration={6000}
+      onClose={handleCloseMessage}
+    >
+      <Alert
+        severity={messageSeverity}
+        onClose={handleCloseMessage}
+      >
+        {messageText}
+      </Alert>
+    </Snackbar>
+
     </Box>
   );
 }
