@@ -37,10 +37,22 @@ export default function Cadastro() {
     clearForm();
 }
 
+const isEmailValid = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
   async function handleSubmit() {
 
     if (nome !== "" && email !== "" && senha !== "") {
       try {
+
+
+        if (!isEmailValid(email)) {
+          setMessageText("E-mail Inválido!");
+          setMessageSeverity("error");
+          setOpenMessage(true);
+          return;
+        }
           await axios.post("/cadastro", {
               nome: nome,
               email: email,
