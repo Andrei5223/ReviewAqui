@@ -30,23 +30,23 @@ export default function Cadastro() {
 
   function handleCancelClick() {
     if (nome !== "" || email !== "") {
-        setMessageText("Cadastro cancelado!");
-        setMessageSeverity("warning");
-        setOpenMessage(true);
+      setMessageText("Cadastro cancelado!");
+      setMessageSeverity("warning");
+      setOpenMessage(true);
     }
     clearForm();
-}
+  }
 
-const isEmailValid = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   async function handleSubmit() {
 
     if (nome !== "" && email !== "" && senha !== "") {
       try {
 
-        if (nome.length < 3 ) {
+        if (nome.length < 3) {
           setMessageText("Minímo de 3 caracteres para nome.");
           setMessageSeverity("warning");
           setOpenMessage(true);
@@ -65,19 +65,19 @@ const isEmailValid = (email) => {
           setOpenMessage(true);
           return;
         }
-          await axios.post("/cadastro", {
-              nome: nome,
-              email: email,
-              senha: senha,
-          });
-          console.log(`Nome: ${nome} - Email: ${email}`);
-          setMessageText("Cadastrado com sucesso!");
-          setMessageSeverity("success");
-          clearForm(); // limpa o formulário apenas se cadastrado com sucesso
+        await axios.post("/cadastro", {
+          nome: nome,
+          email: email,
+          senha: senha,
+        });
+        console.log(`Nome: ${nome} - Email: ${email}`);
+        setMessageText("Cadastrado com sucesso!");
+        setMessageSeverity("success");
+        clearForm(); // limpa o formulário apenas se cadastrado com sucesso
       } catch (error) {
-          console.log(error);
-          setMessageText("Falha no cadastro!");
-          setMessageSeverity("error");
+        console.log(error);
+        setMessageText("Falha no cadastro!");
+        setMessageSeverity("error");
       } finally {
         setOpenMessage(true);
       }
@@ -91,10 +91,10 @@ const isEmailValid = (email) => {
   //Snackbar
   function handleCloseMessage(_, reason) {
     if (reason === "clickaway") {
-        return;
+      return;
     }
     setOpenMessage(false);
-}
+  }
 
   return (
     <Box
@@ -106,105 +106,113 @@ const isEmailValid = (email) => {
       }}
     >
       <Stack direction="row">
-      <Card
-      sx={{
-        backgroundColor: '#68fcad',
-        minWidth: 250,
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '50vh',
-        padding: 2 
-      }}
-    >
-      <Typography variant="h5" component="h1" gutterBottom>
-        Já tem uma conta?
-      </Typography>
+        <Card
+          sx={{
+            backgroundColor: '#68fcad',
+            minWidth: 250,
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50vh',
+            padding: 2
+          }}
+        >
+          <Typography variant="h5" component="h1" gutterBottom>
+            Já tem uma conta?
+          </Typography>
 
-      <Button
-        variant='contained'
-        sx={{ backgroundColor: 'white', color: 'black' }}
-      >
-        Entrar
-      </Button>
-    </Card>
+          <Button
+            variant='contained'
+            sx={{ backgroundColor: 'white', color: 'black' }}
+          >
+            Entrar
+          </Button>
+        </Card>
 
-      <Card component="section" sx={{ p: 2, border: '1px grey', maxWidth: 800, minWidth: 450}}>
-        <CardContent>
+        <Card component="section" sx={{
+          p: 2, border: '1px grey', maxWidth: 800, minWidth: 450, textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center', height: '50vh',
+          padding: 2
+        }}>
+          <CardContent>
 
-          <Stack spacing={3} direction="column">
-            <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
+            <Stack spacing={3} direction="column">
+              <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
                 Crie Sua Conta
-            </Typography>
-            <TextField 
-              id="filled-basic" 
-              label="Nome" 
-              required
-              variant="filled"
-              onChange={(e) => setNome(e.target.value)}
-              value={nome}
-              inputProps={{ maxLength: 50 }}
+              </Typography>
+              <TextField
+                id="filled-basic"
+                label="Nome"
+                required
+                variant="filled"
+                onChange={(e) => setNome(e.target.value)}
+                value={nome}
+                inputProps={{ maxLength: 50 }}
               />
-            <TextField 
-              id="filled-basic" 
-              label="E-Mail" 
-              required 
-              variant="filled"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              inputProps={{ maxLength: 50 }}
-            />
-            <TextField 
-              id="filled-basic" 
-              label="Senha" 
-              type='password'
-              required
-              variant="filled"
-              onChange={(e) => setSenha(e.target.value)}
-              value={senha}
-              inputProps={{ maxLength: 30 }}
-            />
-            
-            <Stack direction="row" spacing={3}>
-              <Button
-                variant="contained"
-                sx={{ mt: 2, 
-                      backgroundColor: '#68fcad', 
-                      color: 'black' 
-                    }} 
-                onClick={handleSubmit}
-              >
+              <TextField
+                id="filled-basic"
+                label="E-Mail"
+                required
+                variant="filled"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                inputProps={{ maxLength: 50 }}
+              />
+              <TextField
+                id="filled-basic"
+                label="Senha"
+                type='password'
+                required
+                variant="filled"
+                onChange={(e) => setSenha(e.target.value)}
+                value={senha}
+                inputProps={{ maxLength: 30 }}
+              />
+
+              <Stack direction="row" spacing={3}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: '#68fcad',
+                    color: 'black'
+                  }}
+                  onClick={handleSubmit}
+                >
                   Cadastrar
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-               
-                onClick={handleCancelClick}
-              >
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+
+                  onClick={handleCancelClick}
+                >
                   Cancelar
-              </Button>
+                </Button>
+              </Stack>
+
             </Stack>
+          </CardContent>
+        </Card>
+      </Stack>
 
-          </Stack>
-        </CardContent>
-      </Card>
-    </Stack>
-
-    <Snackbar
-      open={openMessage}
-      autoHideDuration={6000}
-      onClose={handleCloseMessage}
-    >
-      <Alert
-        severity={messageSeverity}
+      <Snackbar
+        open={openMessage}
+        autoHideDuration={6000}
         onClose={handleCloseMessage}
       >
-        {messageText}
-      </Alert>
-    </Snackbar>
+        <Alert
+          severity={messageSeverity}
+          onClose={handleCloseMessage}
+        >
+          {messageText}
+        </Alert>
+      </Snackbar>
 
     </Box>
   );
