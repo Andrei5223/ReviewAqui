@@ -39,14 +39,7 @@ export default function Login() {
 
     if (email !== "" && senha !== "") {
       try {
-
-        if (senha.length < 8) {
-          setMessageText("Minímo de 8 caracteres para senha.");
-          setMessageSeverity("warning");
-          setOpenMessage(true);
-          return;
-        }
-
+        
           await axios.post("/login", {
               email: email,
               senha: senha,
