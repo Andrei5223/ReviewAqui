@@ -76,3 +76,36 @@ app.post("/cadastro", async (req, res) => {
     res.sendStatus(400); 
   }
 });
+
+app.post("/login", async (req, res) => {
+  const { email, senha } = req.body;
+
+  try {
+    // Busca o usuário pelo email
+    const user = await db.oneOrNone(
+      "SELECT senha FROM pessoa WHERE email = $1",
+      [email]
+    );
+
+    if (!user) {
+      // Se o usuário não for encontrado
+      return res.status(400).json({ error: "Usuário não encontrado." });
+    }
+
+    // Compara a senha fornecida com o hash armazenado
+    const isMatch = await bcrypt.compare(senha, user.senha);
+
+    if (isMatch) {
+      // Se as senhas coincidirem, o usuário é autenticado com sucesso
+      console.log("Usuário autenticado com sucesso");
+      return res.status(200).json({ message: "Usuário autenticado com sucesso" });
+    } else {
+      // Se a senha estiver incorreta
+      return res.status(400).json({ error: "Senha incorreta." });
+    }
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ error: "Erro no servidor." });
+  }
+});
