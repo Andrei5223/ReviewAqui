@@ -11,9 +11,8 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3010/";
 
-export default function Cadastro() {
+export default function Login() {
 
-  const [nome, setNome] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
 
@@ -23,35 +22,24 @@ export default function Cadastro() {
   const [messageSeverity, setMessageSeverity] = React.useState("success");
 
   function clearForm() {
-    setNome("");
     setEmail("");
     setSenha("");
   }
 
-  function handleCancelClick() {
-    if (nome !== "" || email !== "") {
-        setMessageText("Cadastro cancelado!");
-        setMessageSeverity("warning");
-        setOpenMessage(true);
-    }
-    clearForm();
-}
+//   function handleCancelClick() {
+//     if (email !== "") {
+//         setMessageText("Login cancelado!");
+//         setMessageSeverity("warning");
+//         setOpenMessage(true);
+//     }
+//     clearForm();
+// }
 
-const isEmailValid = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
   async function handleSubmit() {
 
-    if (nome !== "" && email !== "" && senha !== "") {
+    if (email !== "" && senha !== "") {
       try {
 
-        if (nome.length < 3 ) {
-          setMessageText("Minímo de 3 caracteres para nome.");
-          setMessageSeverity("warning");
-          setOpenMessage(true);
-          return;
-        }
         if (senha.length < 8) {
           setMessageText("Minímo de 8 caracteres para senha.");
           setMessageSeverity("warning");
@@ -59,24 +47,16 @@ const isEmailValid = (email) => {
           return;
         }
 
-        if (!isEmailValid(email)) {
-          setMessageText("E-mail Inválido!");
-          setMessageSeverity("error");
-          setOpenMessage(true);
-          return;
-        }
-          await axios.post("/cadastro", {
-              nome: nome,
+          await axios.post("/login", {
               email: email,
               senha: senha,
           });
-          console.log(`Nome: ${nome} - Email: ${email}`);
-          setMessageText("Cadastrado com sucesso!");
+          setMessageText("Login com sucesso!");
           setMessageSeverity("success");
           clearForm(); // limpa o formulário apenas se cadastrado com sucesso
       } catch (error) {
           console.log(error);
-          setMessageText("Falha no cadastro!");
+          setMessageText("Falha no Login!");
           setMessageSeverity("error");
       } finally {
         setOpenMessage(true);
@@ -108,7 +88,7 @@ const isEmailValid = (email) => {
       <Stack direction="row">
       <Card
       sx={{
-        backgroundColor: '#68fcad',
+        backgroundColor: 'white',
         minWidth: 250,
         textAlign: 'center',
         display: 'flex',
@@ -120,34 +100,26 @@ const isEmailValid = (email) => {
       }}
     >
       <Typography variant="h5" component="h1" gutterBottom>
-        Já tem uma conta?
+        Não possui cadastro?
       </Typography>
 
       <Button
         variant='contained'
-        sx={{ backgroundColor: 'white', color: 'black' }}
+        sx={{ backgroundColor: '#68fcad', color: 'black' }}
       >
-        Entrar
+        Cadastrar
       </Button>
     </Card>
 
-      <Card component="section" sx={{ p: 2, border: '1px grey', maxWidth: 800, minWidth: 450}}>
+      <Card component="section" sx={{ p: 2, backgroundColor: '#68fcad',
+border: '1px grey', maxWidth: 800, minWidth: 450}}>
         <CardContent>
 
           <Stack spacing={3} direction="column">
             <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-                Crie Sua Conta
+                Faça o seu login
             </Typography>
-            <TextField 
-              id="filled-basic" 
-              label="Nome" 
-              required
-              variant="filled"
-              onChange={(e) => setNome(e.target.value)}
-              value={nome}
-              inputProps={{ maxLength: 50 }}
-              />
-            <TextField 
+            <TextField sx={{ backgroundColor: 'white'}}
               id="filled-basic" 
               label="E-Mail" 
               required 
@@ -156,7 +128,7 @@ const isEmailValid = (email) => {
               value={email}
               inputProps={{ maxLength: 50 }}
             />
-            <TextField 
+            <TextField sx={{ backgroundColor: 'white'}}
               id="filled-basic" 
               label="Senha" 
               type='password'
@@ -171,21 +143,24 @@ const isEmailValid = (email) => {
               <Button
                 variant="contained"
                 sx={{ mt: 2, 
-                      backgroundColor: '#68fcad', 
-                      color: 'black' 
+                      backgroundColor: 'white', 
+                      color: 'black', 
+                      maxWidth: '100px'
                     }} 
                 onClick={handleSubmit}
               >
-                  Cadastrar
+                  Entrar
               </Button>
-              <Button
+              {/* <Button
                 variant="outlined"
                 color="error"
-               
+                sx={{ mt: 2, 
+                      maxWidth: '100px'
+                    }} 
                 onClick={handleCancelClick}
               >
                   Cancelar
-              </Button>
+              </Button> */}
             </Stack>
 
           </Stack>
