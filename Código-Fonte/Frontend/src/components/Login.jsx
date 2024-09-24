@@ -51,6 +51,7 @@ export default function Login() {
                     email: email,
                     senha: senha,
                 });
+                
                 setMessageText("Login com sucesso!");
                 setMessageSeverity("success");
                 navigate("/");

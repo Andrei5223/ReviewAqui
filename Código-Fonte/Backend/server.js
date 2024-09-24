@@ -2,12 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const pgp = require("pg-promise")({});  
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(cors())
-
-// Segurança para login
+const pgp = require("pg-promise")({});
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -16,13 +11,18 @@ const bcrypt = require("bcrypt");
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
+app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(cors());
+
+// Configuração da sessão
 app.use(
-	session({
-		secret: 'Segredo_mt_secreto',
-		resave: false,
-		saveUninitialized: false,
-		cookie: { secure: true },
-	}),
+  session({
+    secret: 'Segredo_mt_secreto',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Mude para true em produção com HTTPS
+  }),
 );
 
 app.use(passport.initialize());
@@ -39,30 +39,27 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
+// Endpoint de teste
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+// Cadastro de usuário
 app.post("/cadastro", async (req, res) => {
   const { nome, email, senha } = req.body;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const saltRounds = 10;
 
-  // Valida entradas (Para caso de uso de proxy)
   if (!nome || !email || !senha) {
-    console.log("Nome, email e senha são obrigatórios");
     return res.status(400).json({ error: "Nome, email e senha são obrigatórios" });
   }
   if (nome.length < 3 || nome.length >= 50 || senha.length < 8 || senha.length > 30){
-    console.log("Tamanho inválido de senha ou nome");
     return res.status(400).json({ error: "Tamanho inválido de senha ou nome" });
   }
   if (!emailPattern.test(email)){
-    console.log("Formato de email inválido");
     return res.status(400).json({ error: "Formato de email inválido" });
   }
 
-  // Criptografa a senha e insere no banco
   try {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(senha, salt);
@@ -77,18 +74,18 @@ app.post("/cadastro", async (req, res) => {
   }
 });
 
+// Login de usuário
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
   try {
     // Busca o usuário pelo email
     const user = await db.oneOrNone(
-      "SELECT senha FROM pessoa WHERE email = $1",
+      "SELECT email,senha FROM pessoa WHERE email = $1",
       [email]
     );
 
     if (!user) {
-      // Se o usuário não for encontrado
       return res.status(400).json({ error: "Usuário não encontrado." });
     }
 
@@ -96,12 +93,13 @@ app.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(senha, user.senha);
 
     if (isMatch) {
-      // Se as senhas coincidirem, o usuário é autenticado com sucesso
-      console.log("Usuário autenticado com sucesso");
-      return res.status(200).json({ message: "Usuário autenticado com sucesso" });
+      // Gera o token JWT
+      const token = jwt.sign({ email: user.email }, 'Segredo_mt_secreto', {
+        expiresIn: '1h',
+      });
+      return res.status(200).json({ message: "Usuário autenticado com sucesso", token });
     } else {
-      // Se a senha estiver incorreta
-      return res.status(400).json({ error: "Email ou senha incorreta." });
+      return res.status(400).json({ error: "Senha incorreta." });
     }
 
   } catch (error) {
