@@ -94,8 +94,14 @@ app.post("/login", async (req, res) => {
 
     if (isMatch) {
       // Gera o token JWT
+<<<<<<< Updated upstream
       const token = jwt.sign({ email: user.email }, 'Segredo_mt_secreto', {
         expiresIn: '1h',
+=======
+      const token = jwt.sign({ id: user.id, nome: user.nome }, 'seu_segredo_jwt', {
+        expiresIn: '1h',
+        
+>>>>>>> Stashed changes
       });
       return res.status(200).json({ message: "Usuário autenticado com sucesso", token });
     } else {
