@@ -1,6 +1,11 @@
+import { Box } from "@mui/material";
+
 export default function Inicial(){
 
     return (
-        <>Hello World</>
+        <Box>
+            Hello World!
+
+        </Box>
     )
 }

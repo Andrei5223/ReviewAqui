@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div className="App">
@@ -15,17 +15,15 @@ function App() {
 
         <Box>
           {
-            isLoggedIn ? (
+  
             <Routes>
               
-              <Route path="/Cadastro" element={<Cadastro></Cadastro>}></Route>
-              <Route path="/Login" element={<Login></Login>}></Route>
+              <Route path="/cadastro" element={<Cadastro></Cadastro>}></Route>
+              <Route path="/login" element={<Login></Login>}></Route>
               <Route path="/" element={<Inicial></Inicial>}></Route>
           
             </Routes>
-            ):(
-              console.log("A")
-            )
+
           }
         </Box>
       </Router>
