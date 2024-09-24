@@ -178,7 +178,7 @@ export default function Cadastro() {
                 variant="filled"
                 onChange={(e) => setSenha(e.target.value)}
                 value={senha}
-                inputProps={{ maxLength: 30 }}
+                inputProps={{ maxLength: 20 }}
               />
               <Button
                 variant="contained"

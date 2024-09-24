@@ -53,7 +53,7 @@ app.post("/cadastro", async (req, res) => {
   if (!nome || !email || !senha) {
     return res.status(400).json({ error: "Nome, email e senha são obrigatórios" });
   }
-  if (nome.length < 3 || nome.length >= 50 || senha.length < 8 || senha.length > 30){
+  if (nome.length < 3 || nome.length > 50 || senha.length < 8 || senha.length > 20){
     return res.status(400).json({ error: "Tamanho inválido de senha ou nome" });
   }
   if (!emailPattern.test(email)){
