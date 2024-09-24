@@ -31,7 +31,7 @@ export default function Cadastro() {
   }
 
   function toggleLogin(){
-    navigate("/Login");
+    navigate("/login");
   }
 
   function handleCancelClick() {
@@ -150,7 +150,7 @@ export default function Cadastro() {
 
             <Stack spacing={3} direction="column">
               <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-                Crie Sua Conta
+                Crie sua Conta
               </Typography>
               <TextField 
                 id="filled-basic"
@@ -180,29 +180,17 @@ export default function Cadastro() {
                 value={senha}
                 inputProps={{ maxLength: 30 }}
               />
-
-              <Stack direction="row" spacing={3}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    backgroundColor: '#68fcad',
-                    color: 'black'
-                  }}
-                  onClick={handleSubmit}
-                >
-                  Cadastrar
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-
-                  onClick={handleCancelClick}
-                >
-                  Cancelar
-                </Button>
-              </Stack>
-
+              <Button
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  backgroundColor: '#68fcad',
+                  color: 'black'
+                }}
+                onClick={handleSubmit}
+              >
+                Cadastrar
+              </Button>
             </Stack>
           </CardContent>
         </Card>

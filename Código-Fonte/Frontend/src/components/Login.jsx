@@ -27,19 +27,17 @@ export default function Login() {
         setSenha("");
     }
 
-    
-
-    //   function handleCancelClick() {
-    //     if (email !== "") {
-    //         setMessageText("Login cancelado!");
-    //         setMessageSeverity("warning");
-    //         setOpenMessage(true);
-    //     }
-    //     clearForm();
-    // }
+      function handleCancelClick() {
+        if (email !== "") {
+            setMessageText("Login cancelado!");
+            setMessageSeverity("warning");
+            setOpenMessage(true);
+        }
+        clearForm();
+    }
 
     function toggleRegister(){
-        navigate("/Cadastro");
+        navigate("/cadastro");
     }
 
     async function handleSubmit() {
@@ -127,7 +125,7 @@ export default function Login() {
 
                         <Stack spacing={3} direction="column">
                             <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-                                Faça o seu login
+                                Faça o seu Login
                             </Typography>
                             <TextField sx={{ backgroundColor: 'white', borderTopRightRadius: '3px', borderTopLeftRadius: '3px' }}
                                 id="filled-basic"
@@ -148,32 +146,18 @@ export default function Login() {
                                 value={senha}
                                 inputProps={{ maxLength: 30 }}
                             />
-
-                            <Stack direction="row" spacing={3}>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        mt: 2,
-                                        backgroundColor: 'white',
-                                        color: 'black',
-                                        maxWidth: '100px'
-                                    }}
-                                    onClick={handleSubmit}
-                                >
-                                    Entrar
-                                </Button>
-                                {/* <Button
-                variant="outlined"
-                color="error"
-                sx={{ mt: 2, 
-                      maxWidth: '100px'
-                    }} 
-                onClick={handleCancelClick}
-              >
-                  Cancelar
-              </Button> */}
-                            </Stack>
-
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    mt: 2,
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                    maxWidth: '100px'
+                                }}
+                                onClick={handleSubmit}
+                            >
+                                Entrar
+                            </Button>
                         </Stack>
                     </CardContent>
                 </Card>
