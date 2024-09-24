@@ -8,10 +8,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Snackbar, Alert } from '@mui/material';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:3010/";
 
 export default function Cadastro() {
+  const navigate = useNavigate();
 
   const [nome, setNome] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -26,6 +28,10 @@ export default function Cadastro() {
     setNome("");
     setEmail("");
     setSenha("");
+  }
+
+  function toggleLogin(){
+    navigate("/Login");
   }
 
   function handleCancelClick() {
@@ -126,6 +132,7 @@ export default function Cadastro() {
           <Button
             variant='contained'
             sx={{ backgroundColor: 'white', color: 'black' }}
+            onClick={toggleLogin}
           >
             Entrar
           </Button>
@@ -145,7 +152,7 @@ export default function Cadastro() {
               <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
                 Crie Sua Conta
               </Typography>
-              <TextField
+              <TextField 
                 id="filled-basic"
                 label="Nome"
                 required

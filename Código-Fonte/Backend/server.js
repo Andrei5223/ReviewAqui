@@ -101,7 +101,7 @@ app.post("/login", async (req, res) => {
       return res.status(200).json({ message: "Usuário autenticado com sucesso" });
     } else {
       // Se a senha estiver incorreta
-      return res.status(400).json({ error: "Senha incorreta." });
+      return res.status(400).json({ error: "Email ou senha incorreta." });
     }
 
   } catch (error) {
