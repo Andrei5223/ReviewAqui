@@ -8,13 +8,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Snackbar, Alert, Modal } from '@mui/material';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:3010/";
 
-export default function Cadastro({handleCloseCadastro, openCadastro}) {
-  const navigate = useNavigate();
-
+export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenLogin}) {
   const [nome, setNome] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
@@ -30,18 +27,10 @@ export default function Cadastro({handleCloseCadastro, openCadastro}) {
     setSenha("");
   }
 
-  function toggleLogin(){
-    navigate("/login");
-  }
-
-  function handleCancelClick() {
-    if (nome !== "" || email !== "") {
-      setMessageText("Cadastro cancelado!");
-      setMessageSeverity("warning");
-      setOpenMessage(true);
-    }
-    clearForm();
-  }
+  function handleChangeToLogin() {
+    handleCloseCadastro()
+    handleOpenLogin()
+}
 
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -138,7 +127,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro}) {
             <Button
               variant='contained'
               sx={{ backgroundColor: 'white', color: 'black' }}
-              onClick={toggleLogin}
+              onClick={handleChangeToLogin}
             >
               Entrar
             </Button>

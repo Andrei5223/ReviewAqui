@@ -21,10 +21,11 @@ export default function Inicial(){
             <Cadastro
                 handleCloseCadastro = {handleCloseCadastro}
                 openCadastro = {openCadastro}
+                handleOpenLogin = {handleOpenLogin}
             />
 
             <Login
-                handleCloseLogin = {handleCloseCadastro}
+                handleCloseLogin = {handleCloseLogin}
                 openLogin = {openLogin}
                 handleOpenCadastro = {handleOpenCadastro}
             />

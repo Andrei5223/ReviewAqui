@@ -8,12 +8,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Snackbar, Alert, Modal } from '@mui/material';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 axios.defaults.baseURL = "http://localhost:3010/";
 
 export default function Login({handleCloseLogin, openLogin, handleOpenCadastro}) {
-    const navigate = useNavigate();
-
     const [email, setEmail] = React.useState("");
     const [senha, setSenha] = React.useState("");
 
@@ -33,7 +30,6 @@ export default function Login({handleCloseLogin, openLogin, handleOpenCadastro})
                 
                 setMessageText("Login com sucesso!");
                 setMessageSeverity("success");
-                navigate("/");
             } catch (error) {
                 console.log(error);
                 setMessageText("Falha no Login!");
