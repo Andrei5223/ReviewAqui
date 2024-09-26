@@ -6,13 +6,13 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, Modal } from '@mui/material';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:3010/";
 
-export default function Cadastro() {
+export default function Cadastro({handleCloseCadastro, openCadastro}) {
   const navigate = useNavigate();
 
   const [nome, setNome] = React.useState("");
@@ -103,112 +103,119 @@ export default function Cadastro() {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
-      }}
-    >
-      <Stack direction="row">
-        <Card
-          sx={{
-            backgroundColor: '#68fcad',
-            minWidth: 250,
-            textAlign: 'center',
+      <Modal
+        open={openCadastro}
+        onClose={handleCloseCadastro}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
+        }}
+      >
+        <Stack direction="row">
+          <Card
+            sx={{
+              backgroundColor: '#68fcad',
+              minWidth: 250,
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '50vh',
+              padding: 2
+            }}
+          >
+            <Typography variant="h5" component="h1" gutterBottom>
+              Já tem uma conta?
+            </Typography>
+
+            <Button
+              variant='contained'
+              sx={{ backgroundColor: 'white', color: 'black' }}
+              onClick={toggleLogin}
+            >
+              Entrar
+            </Button>
+          </Card>
+
+          <Card component="section" sx={{
+            p: 2, border: '1px grey', maxWidth: 800, minWidth: 450, textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '50vh',
+            alignItems: 'center', height: '50vh',
             padding: 2
-          }}
-        >
-          <Typography variant="h5" component="h1" gutterBottom>
-            Já tem uma conta?
-          </Typography>
+          }}>
+            <CardContent>
 
-          <Button
-            variant='contained'
-            sx={{ backgroundColor: 'white', color: 'black' }}
-            onClick={toggleLogin}
-          >
-            Entrar
-          </Button>
-        </Card>
+              <Stack spacing={3} direction="column">
+                <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
+                  Crie sua Conta
+                </Typography>
+                <TextField 
+                  id="filled-basic"
+                  label="Nome"
+                  required
+                  variant="filled"
+                  onChange={(e) => setNome(e.target.value)}
+                  value={nome}
+                  inputProps={{ maxLength: 50 }}
+                />
+                <TextField
+                  id="filled-basic"
+                  label="E-Mail"
+                  required
+                  variant="filled"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  inputProps={{ maxLength: 50 }}
+                />
+                <TextField
+                  id="filled-basic"
+                  label="Senha"
+                  type='password'
+                  required
+                  variant="filled"
+                  onChange={(e) => setSenha(e.target.value)}
+                  value={senha}
+                  inputProps={{ maxLength: 20 }}
+                />
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: '#68fcad',
+                    color: 'black'
+                  }}
+                  onClick={handleSubmit}
+                >
+                  Cadastrar
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Stack>
 
-        <Card component="section" sx={{
-          p: 2, border: '1px grey', maxWidth: 800, minWidth: 450, textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center', height: '50vh',
-          padding: 2
-        }}>
-          <CardContent>
-
-            <Stack spacing={3} direction="column">
-              <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-                Crie sua Conta
-              </Typography>
-              <TextField 
-                id="filled-basic"
-                label="Nome"
-                required
-                variant="filled"
-                onChange={(e) => setNome(e.target.value)}
-                value={nome}
-                inputProps={{ maxLength: 50 }}
-              />
-              <TextField
-                id="filled-basic"
-                label="E-Mail"
-                required
-                variant="filled"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                inputProps={{ maxLength: 50 }}
-              />
-              <TextField
-                id="filled-basic"
-                label="Senha"
-                type='password'
-                required
-                variant="filled"
-                onChange={(e) => setSenha(e.target.value)}
-                value={senha}
-                inputProps={{ maxLength: 20 }}
-              />
-              <Button
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  backgroundColor: '#68fcad',
-                  color: 'black'
-                }}
-                onClick={handleSubmit}
-              >
-                Cadastrar
-              </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Stack>
-
-      <Snackbar
-        open={openMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseMessage}
-      >
-        <Alert
-          severity={messageSeverity}
+        <Snackbar
+          open={openMessage}
+          autoHideDuration={6000}
           onClose={handleCloseMessage}
         >
-          {messageText}
-        </Alert>
-      </Snackbar>
+          <Alert
+            severity={messageSeverity}
+            onClose={handleCloseMessage}
+          >
+            {messageText}
+          </Alert>
+        </Snackbar>
 
-    </Box>
+      </Box>
+    </Modal>
   );
 }

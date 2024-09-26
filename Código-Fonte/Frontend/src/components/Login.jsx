@@ -6,12 +6,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, Modal } from '@mui/material';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 axios.defaults.baseURL = "http://localhost:3010/";
 
-export default function Login() {
+export default function Login({handleCloseLogin, openLogin, handleOpenCadastro}) {
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState("");
@@ -22,26 +22,7 @@ export default function Login() {
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
 
-    function clearForm() {
-        setEmail("");
-        setSenha("");
-    }
-
-      function handleCancelClick() {
-        if (email !== "") {
-            setMessageText("Login cancelado!");
-            setMessageSeverity("warning");
-            setOpenMessage(true);
-        }
-        clearForm();
-    }
-
-    function toggleRegister(){
-        navigate("/cadastro");
-    }
-
     async function handleSubmit() {
-
         if (email !== "" && senha !== "") {
             try {
 
@@ -76,107 +57,119 @@ export default function Login() {
         setOpenMessage(false);
     }
 
+    function handleChangeToCadastro() {
+        handleCloseLogin()
+        handleOpenCadastro()
+    }
+
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
-            }}
+        <Modal
+            open={openLogin}
+            onClose={handleCloseLogin}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
         >
-            <Stack direction="row">
-                <Card
-                    sx={{
-                        backgroundColor: 'white',
-                        minWidth: 250,
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
+                }}
+            >
+                <Stack direction="row">
+                    <Card
+                        sx={{
+                            backgroundColor: 'white',
+                            minWidth: 250,
+                            textAlign: 'center',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '50vh',
+                            padding: 2,
+                        }}
+                    >
+                        <Typography variant="h5" component="h1" gutterBottom>
+                            Não possui cadastro?
+                        </Typography>
+
+                        <Button
+                            variant='contained'
+                            sx={{ backgroundColor: '#68fcad', color: 'black' }}
+                            onClick={handleChangeToCadastro}
+                        >
+                            Cadastrar
+                        </Button>
+                    </Card>
+
+                    <Card component="section" sx={{
+                        p: 2, backgroundColor: '#68fcad',
+                        border: '1px grey', maxWidth: 800, minWidth: 450,
                         textAlign: 'center',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '50vh',
-                        padding: 2,
-                    }}
-                >
-                    <Typography variant="h5" component="h1" gutterBottom>
-                        Não possui cadastro?
-                    </Typography>
+                        alignItems: 'center', height: '50vh',
+                        padding: 2
+                    }}>
+                        <CardContent>
 
-                    <Button
-                        variant='contained'
-                        sx={{ backgroundColor: '#68fcad', color: 'black' }}
-                        onClick={toggleRegister}
-                    >
-                        Cadastrar
-                    </Button>
-                </Card>
+                            <Stack spacing={3} direction="column">
+                                <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
+                                    Faça o seu Login
+                                </Typography>
+                                <TextField sx={{ backgroundColor: 'white', borderTopRightRadius: '3px', borderTopLeftRadius: '3px' }}
+                                    id="filled-basic"
+                                    label="E-Mail"
+                                    required
+                                    variant="filled"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
+                                    inputProps={{ maxLength: 50 }}
+                                />
+                                <TextField sx={{ backgroundColor: 'white', borderTopRightRadius: '3px', borderTopLeftRadius: '3px'  }}
+                                    id="filled-basic"
+                                    label="Senha"
+                                    type='password'
+                                    required
+                                    variant="filled"
+                                    onChange={(e) => setSenha(e.target.value)}
+                                    value={senha}
+                                    inputProps={{ maxLength: 30 }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        mt: 2,
+                                        backgroundColor: 'white',
+                                        color: 'black',
+                                        maxWidth: '100px'
+                                    }}
+                                    onClick={handleSubmit}
+                                >
+                                    Entrar
+                                </Button>
+                            </Stack>
+                        </CardContent>
+                    </Card>
+                </Stack>
 
-                <Card component="section" sx={{
-                    p: 2, backgroundColor: '#68fcad',
-                    border: '1px grey', maxWidth: 800, minWidth: 450,
-                    textAlign: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center', height: '50vh',
-                    padding: 2
-                }}>
-                    <CardContent>
-
-                        <Stack spacing={3} direction="column">
-                            <Typography variant="h4" component="h2" fontFamily={'Arial, Helvetica, sans-serif'}>
-                                Faça o seu Login
-                            </Typography>
-                            <TextField sx={{ backgroundColor: 'white', borderTopRightRadius: '3px', borderTopLeftRadius: '3px' }}
-                                id="filled-basic"
-                                label="E-Mail"
-                                required
-                                variant="filled"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                                inputProps={{ maxLength: 50 }}
-                            />
-                            <TextField sx={{ backgroundColor: 'white', borderTopRightRadius: '3px', borderTopLeftRadius: '3px'  }}
-                                id="filled-basic"
-                                label="Senha"
-                                type='password'
-                                required
-                                variant="filled"
-                                onChange={(e) => setSenha(e.target.value)}
-                                value={senha}
-                                inputProps={{ maxLength: 30 }}
-                            />
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    mt: 2,
-                                    backgroundColor: 'white',
-                                    color: 'black',
-                                    maxWidth: '100px'
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                Entrar
-                            </Button>
-                        </Stack>
-                    </CardContent>
-                </Card>
-            </Stack>
-
-            <Snackbar
-                open={openMessage}
-                autoHideDuration={6000}
-                onClose={handleCloseMessage}
-            >
-                <Alert
-                    severity={messageSeverity}
+                <Snackbar
+                    open={openMessage}
+                    autoHideDuration={6000}
                     onClose={handleCloseMessage}
                 >
-                    {messageText}
-                </Alert>
-            </Snackbar>
+                    <Alert
+                        severity={messageSeverity}
+                        onClose={handleCloseMessage}
+                    >
+                        {messageText}
+                    </Alert>
+                </Snackbar>
 
-        </Box>
+            </Box>
+        </Modal>
     );
 }
