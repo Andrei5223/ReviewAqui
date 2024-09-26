@@ -67,12 +67,15 @@ export default function Login({handleCloseLogin, openLogin, handleOpenCadastro})
         >
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
-                }}
-            >
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh', // Para centralizar verticalmente, você pode usar a altura da viewport
+            }}>
                 <Stack direction="row">
                     <Card
                         sx={{
