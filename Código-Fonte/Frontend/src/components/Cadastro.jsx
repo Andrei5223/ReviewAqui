@@ -69,6 +69,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
         setMessageText("Cadastrado com sucesso!");
         setMessageSeverity("success");
         clearForm(); // limpa o formulário apenas se cadastrado com sucesso
+        handleCloseCadastro();
       } catch (error) {
         console.log(error);
         setMessageText("Falha no cadastro!");

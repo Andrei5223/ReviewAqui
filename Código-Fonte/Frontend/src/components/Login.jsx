@@ -19,17 +19,20 @@ export default function Login({handleCloseLogin, openLogin, handleOpenCadastro})
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
 
+    function clearForm() {
+        setEmail("");
+        setSenha("");
+    }
+
     async function handleSubmit() {
         if (email !== "" && senha !== "") {
             try {
-
                 await axios.post("/login", {
                     email: email,
                     senha: senha,
                 });
-                
-                setMessageText("Login com sucesso!");
-                setMessageSeverity("success");
+                clearForm();
+                handleHandleCloseLogin();
             } catch (error) {
                 console.log(error);
                 setMessageText("Falha no Login!");
@@ -58,10 +61,15 @@ export default function Login({handleCloseLogin, openLogin, handleOpenCadastro})
         handleOpenCadastro()
     }
 
+    function handleHandleCloseLogin() {
+        handleCloseLogin()
+        handleCloseMessage()
+    }
+
     return (
         <Modal
             open={openLogin}
-            onClose={handleCloseLogin}
+            onClose={handleHandleCloseLogin}
             aria-labelledby="modal-title"
             aria-describedby="modal-description"
         >
