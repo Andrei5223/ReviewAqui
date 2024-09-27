@@ -3,28 +3,44 @@ import { Box } from "@mui/material";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
 import Inicial from "./Inicial";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  // Função que verifica se o usuário já está logado
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    if (token && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setIsLoggedIn(true);
+      setUserName(parsedUser.nome);
+      // Atualiza o nome do usuário
+    }
+  };
+
+  // useEffect para verificar o login ao carregar a página
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   return (
     <div className="App">
       <Router>
-
         <Box>
-          {
-  
-            <Routes>
-              
-              <Route path="/cadastro" element={<Cadastro></Cadastro>}></Route>
-              <Route path="/login" element={<Login></Login>}></Route>
-              <Route path="/" element={<Inicial></Inicial>}></Route>
-          
-            </Routes>
-
-          }
+          <Routes>
+            <Route
+              path="/"
+              element={<Inicial isLoggedIn={isLoggedIn} userName={userName} />}
+            />
+          </Routes>
         </Box>
       </Router>
     </div>
