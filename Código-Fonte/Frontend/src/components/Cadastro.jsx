@@ -27,8 +27,13 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
     setSenha("");
   }
 
+  function handleCloseCloseCadastro(){
+    clearForm();
+    handleCloseCadastro();
+  }
+
   function handleChangeToLogin() {
-    handleCloseCadastro()
+    handleCloseCloseCadastro()
     handleOpenLogin()
 }
 
@@ -68,8 +73,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
         console.log(`Nome: ${nome} - Email: ${email}`);
         setMessageText("Cadastrado com sucesso!");
         setMessageSeverity("success");
-        clearForm(); // limpa o formulário apenas se cadastrado com sucesso
-        handleCloseCadastro();
+        handleCloseCloseCadastro();
       } catch (error) {
         console.log(error);
         setMessageText("Falha no cadastro!");
@@ -95,7 +99,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
   return (
       <Modal
         open={openCadastro}
-        onClose={handleCloseCadastro}
+        onClose={handleCloseCloseCadastro}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
