@@ -70,11 +70,13 @@ export default function Login({
   }
 
   function handleChangeToCadastro() {
+    clearForm()
     handleCloseLogin();
     handleOpenCadastro();
   }
 
   function handleHandleCloseLogin() {
+    clearForm()
     handleCloseLogin();
     handleCloseMessage();
   }
