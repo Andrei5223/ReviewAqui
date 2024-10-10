@@ -10,6 +10,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+const { spawnSync } = require('child_process');
+const { readFile } = require('fs/promises');
+const { appendFile } = require('fs/promises');
+const { join } = require('path');
 
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -115,6 +119,51 @@ app.post("/login", async (req, res) => {
     } else {
       return res.status(400).json({ error: "Senha incorreta." });
     }
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ error: "Erro no servidor." });
+  }
+});
+
+// Get data
+app.get("/data", async (req, res) => {
+  try {
+    const name = req.query.name;
+    console.log("Nome: " + name);
+
+    // Busca o usuário pelo email
+    const sources = await db.manyOrNone(
+      "SELECT nome, link FROM fonte WHERE idp = (SELECT idp FROM produto WHERE nome = $1);",
+      [name]
+    );
+
+    console.log("Sources: " + sources);
+
+    if (!sources) {
+      return res.status(400).json({ error: "Produto não encontrado." });
+    }
+
+    console.log(JSON.stringify(sources));
+
+    // const pythonProcess = await spawnSync('python3', [
+    //   '/usr/src/app/scripts/python-script.py',
+    //   'first_function',
+    //   JSON.stringify(sources[0]),
+    //   '/usr/src/app/scripts/results.json'
+    // ]);
+    // const result = pythonProcess.stdout?.toString()?.trim();
+    // const error = pythonProcess.stderr?.toString()?.trim();
+
+
+    // return res.status(200).json({
+    //   message: "Usuário autenticado com sucesso",
+    //   token,
+    //   user: {
+    //     email: email,
+    //     nome: user.nome,
+    //   },
+    // });
+
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ error: "Erro no servidor." });
