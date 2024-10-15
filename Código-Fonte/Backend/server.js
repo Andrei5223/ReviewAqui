@@ -167,7 +167,7 @@ app.get("/data", async (req, res) => {
       error = pythonProcess.stderr?.toString()?.trim();
     
       if (!error) {
-        results[source.nome] = result; 
+        results[source.nome] = JSON.parse(result); 
       } else {
         console.log(error);
         return res.status(500).send(JSON.stringify({ status: 500, message: 'Server error' }));

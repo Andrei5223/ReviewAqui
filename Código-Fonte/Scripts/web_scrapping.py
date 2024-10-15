@@ -154,5 +154,5 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
 if sys.argv[1] == 'web_scrap_steam':
     print(web_scrap_steam(url = sys.argv[2]))
-# elif sys.argv[1] == 'web_scrap_amazon':
-#     print(web_scrap_amazon(url = sys.argv[2]))
+elif sys.argv[1] == 'web_scrap_amazon':
+    print(web_scrap_amazon(url = sys.argv[2]))
