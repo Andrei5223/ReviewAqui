@@ -138,31 +138,44 @@ app.get("/data", async (req, res) => {
     );
 
     console.log("Sources: " + sources);
+    console.log("Sources 0 nome: " + sources[0].nome);
 
-    if (!sources) {
+    if (sources.length === 0) {
       return res.status(400).json({ error: "Produto não encontrado." });
     }
 
-    console.log(JSON.stringify(sources));
+    let results = {};
 
-    // const pythonProcess = await spawnSync('python3', [
-    //   '/usr/src/app/scripts/python-script.py',
-    //   'first_function',
-    //   JSON.stringify(sources[0]),
-    //   '/usr/src/app/scripts/results.json'
-    // ]);
-    // const result = pythonProcess.stdout?.toString()?.trim();
-    // const error = pythonProcess.stderr?.toString()?.trim();
-
-
-    // return res.status(200).json({
-    //   message: "Usuário autenticado com sucesso",
-    //   token,
-    //   user: {
-    //     email: email,
-    //     nome: user.nome,
-    //   },
-    // });
+    sources.forEach(function(source) {
+      let pythonProcess;
+    
+      if (source.nome === 'STEAM') {
+        pythonProcess = spawnSync('python3', [
+          '../Scripts/web_scrapping.py',
+          'web_scrap_steam',
+          source.link,
+        ]);
+      } else if (source.nome === 'AMAZON') {
+        pythonProcess = spawnSync('python3', [
+          '../Scripts/web_scrapping.py',
+          'web_scrap_amazon',
+          source.link,
+        ]);
+      }
+    
+      result = pythonProcess.stdout?.toString()?.trim();
+      error = pythonProcess.stderr?.toString()?.trim();
+    
+      if (!error) {
+        results[source.nome] = result; 
+      } else {
+        console.log(error);
+        return res.status(500).send(JSON.stringify({ status: 500, message: 'Server error' }));
+      }
+    });
+    
+    // Envia os resultados acumulados após o loop
+    res.send(results);
 
   } catch (error) {
     console.error(error.message);

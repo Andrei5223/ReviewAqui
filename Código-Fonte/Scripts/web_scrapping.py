@@ -7,6 +7,74 @@ from webdriver_manager.chrome import ChromeDriverManager  # para gerenciar o dri
 from selenium.webdriver.common.by import By
 import time
 import json
+import sys
+
+def web_scrap_amazon(url: str = 'https://www.amazon.com.br/TAKE-TWO-GTA-V/dp/B0B12DV64Y/'):
+    result = {}
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0',
+        'Accept-Language': 'pt-BR'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        response.encoding = 'utf-8'
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        try:
+            developers = soup.find('a', id='bylineInfo').text.replace('\n', '').replace('Marca:', '').strip()
+            result["developers"] = developers
+        except AttributeError:
+            print("Desenvolvedores: Informação não disponível.")
+
+        try:
+            platform = soup.find('div', id='platformInformation_feature_div').text.replace('\n', '').replace('Plataforma:', '').strip()
+            result["platform"] = platform
+        except AttributeError:
+            print("Plataforma: Informação não disponível.")
+
+        try:
+            users_summary_review = (soup.find('span', class_='a-icon-alt').text.replace('\n', '') + 
+                                    ' ' + soup.find('span', id='acrCustomerReviewText').text.replace('\n', ''))
+            result["users_summary_review"] = users_summary_review
+        except AttributeError:
+            print("Resumo de avaliações: Informação não disponível.")
+
+        try:
+            price = soup.find('span', class_='aok-offscreen').text.strip()
+            result["price"] = price
+        except AttributeError:
+            print("Preço: Informação não disponível.")
+
+        try:
+            description = soup.find('div', id='feature-bullets').text.replace('\n', '').replace('›  Ver mais detalhes do produto', '').strip()
+            result["description"] = description
+        except AttributeError:
+            print("Descrição: Informação não disponível.")
+
+        try:
+            reviews = soup.find('div', class_='card-padding').text.replace('\n', '').replace('Veja mais avaliações', '').replace('Ordenar avaliações por            Melhores avaliações              Mais recentes      Melhores avaliações  Principais avaliações do Brasil' , '').replace('Imagens nesta avaliação', '').replace('Ocorreu um problema para filtrar as avaliações agora. Tente novamente mais tarde.', '').replace('Ler mais', '').split('ÚtilDenunciar')
+            result["reviews"] = reviews
+        except AttributeError:
+            print("Descrição: Informação não disponível.")    
+
+        # Para a data, você pode descomentar se quiser:
+        # try:
+        #     date = soup.find('span', class_='a-list-item').text.replace('Data de lançamento :', '').strip()
+        #     result["date"] = date
+        # except AttributeError:
+        #     print("Data de lançamento: Informação não disponível.")
+
+    else:
+        print("Erro: Não foi possível acessar o site indicado.")
+        result = {}
+
+    game_info_json = json.dumps(result, ensure_ascii=False, indent=4)
+
+    return game_info_json
+
 
 options = Options()
 #options.add_argument("--headless") # Se ativo, retorna em inglês
@@ -125,4 +193,7 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
     return game_info_json
 
-web_scrap_steam()
+if sys.argv[1] == 'web_scrap_steam':
+    print(web_scrap_steam(url = sys.argv[2]))
+# elif sys.argv[1] == 'web_scrap_amazon':
+#     print(web_scrap_amazon(url = sys.argv[2]))
