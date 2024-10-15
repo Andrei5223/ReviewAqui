@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib3
 import itertools
 import json
+import sys
 
 def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_of_War_Ragnark/'):
 
@@ -42,7 +43,7 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
         price = soup.find('div', class_='game_purchase_price price').text.replace('\t', '').replace('\r', '').replace('\n', '')
 
-        classification_age = soup.find('div', class_='game_rating_required_age').text.replace('\t', '').replace('\r', '').replace('\n', '')
+        # classification_age = soup.find('div', class_='game_rating_required_age').text.replace('\t', '').replace('\r', '').replace('\n', '')
 
         # Colocar gêneros reais: trabalhoso
 
@@ -69,7 +70,7 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
             "price": price,
 
-            "classification_age": classification_age,
+            # "classification_age": classification_age,
 
             "requiriments": requiriments    # AGREGAR 2x
 
@@ -84,4 +85,7 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
     return game_info_json
 
-print(web_scrap_steam())
+if sys.argv[1] == 'web_scrap_steam':
+    print(web_scrap_steam(url = sys.argv[2]))
+# elif sys.argv[1] == 'web_scrap_amazon':
+#     print(web_scrap_amazon(url = sys.argv[2]))
