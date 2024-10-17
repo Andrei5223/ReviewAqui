@@ -112,35 +112,72 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        img = soup.find('img', class_='game_header_image_full')
-        img_src = img['src'] if img else None
+        try:
+            img = soup.find('img', class_='game_header_image_full')
+            img_src = img['src'] if img else None
+            result["img_src"] = img_src
+        except AttributeError:
+            result["img_src"] = "Não disponível"
 
-        description = soup.find('div', class_='game_description_snippet').text.strip()
+        try:
+            description = soup.find('div', class_='game_description_snippet').text.strip()
+            result["description"] = description
+        except AttributeError:
+            result["description"] = "Não disponível"
 
-        users_summary_review = soup.find('div', class_='user_reviews_summary_row').text.replace('\n', '').replace('\t', '').replace('\r', '').strip()
+        try:
+            users_summary_review = soup.find('div', class_='user_reviews_summary_row').text.replace('\n', '').replace('\t', '').replace('\r', '').strip()
+            result["users_summary_review"] = users_summary_review
+        except AttributeError:
+            result["users_summary_review"] = "Não disponível"
 
-        date = soup.find('div', class_='date').text
+        try:
+            date = soup.find('div', class_='date').text
+            result["date"] = date
+        except AttributeError:
+            result["date"] = "Não disponível"
 
-        developers = soup.find('div', id='developers_list').text.replace('\n', '')
+        try:
+            developers = soup.find('div', id='developers_list').text.replace('\n', '')
+            result["developers"] = developers
+        except AttributeError:
+            result["developers"] = "Não disponível"
 
-        devs = soup.find_all('div', class_='dev_row')
+        #devs = soup.find_all('div', class_='dev_row')
 
-        #print(distributors) # FALTA ID NA CLASSE
+        try:
+            popular_genders = soup.find('div', class_='glance_tags popular_tags').text.strip().replace('\t', '').replace('\n', '').replace('\r', ', ')
+            result["popular_genders"] = popular_genders
+        except AttributeError:
+            result["popular_genders"] = "Não disponível"
 
-        popular_genders = soup.find('div', class_='glance_tags popular_tags').text.strip().replace('\t', '').replace('\n', '').replace('\r', ', ')
+        try:
+            categories = soup.find('div', class_='game_area_features_list_ctn').text.replace('\n', '')
+            result["categories"] = categories
+        except AttributeError:
+            result["categories"] = "Não disponível"
 
-        categories = soup.find('div', class_='game_area_features_list_ctn').text
+        try:
+            price = soup.find('div', class_='game_purchase_price price').text.replace('\t', '').replace('\r', '').replace('\n', '')
+            result["price"] = price
+        except AttributeError:
+            result["price"] = "Não disponível"
+
+        try:
+            requiriments = soup.find('div', class_='game_area_sys_req sysreq_content active').text.replace('\n', '')  # SEPARAR PARA AGREGAÇÃO
+            result["requiriments"] = requiriments
+        except AttributeError:
+            result["requiriments"] = "Não disponível"
+
+        try:
+            classification_age = soup.find('div', class_='game_rating_required_age').text.replace('\t', '').replace('\r', '').replace('\n', '')
+            result["classification_age"] = classification_age
+        except AttributeError:
+            result["classification_age"] = "Não disponível"
 
         #compatibility = soup.find('div', class_='_1CTHwmZmi5YE4kovZH_UIl')     # ESQUISITO
 
-        price = soup.find('div', class_='game_purchase_price price').text.replace('\t', '').replace('\r', '').replace('\n', '')
-
-        # CONFLITO
-        #classification_age = soup.find('div', class_='game_rating_required_age').text.replace('\t', '').replace('\r', '').replace('\n', '')
-
         # Colocar gêneros reais: trabalhoso
-
-        requiriments = soup.find('div', class_='game_area_sys_req sysreq_content active').text  # SEPARAR PARA AGREGAÇÃO
 
         #print(soup.find('div', class_='game_area_sys_req sysreq_content active'))
 
@@ -152,41 +189,16 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
         comments = driver.find_elements(By.ID, 'Reviews_summary')
 
-        for comment in comments:
-           print(comment.text)
+        # for comment in comments:
+        #    print(comment.text)
 
         driver.quit()
 
         #print(soup.find('div', id='user_reviews_filter_score'))
-
-        #FORMATAR
-        result = {
-
-            "img_src": img_src,
-
-            "description": description,
-        
-            "users_sumary_review": users_summary_review,
-
-            "date": date,
-
-            "developers": developers,   #AGREGAR
-            
-            "popular_genders": popular_genders, #AGREGAR
-
-            "categories": categories,   #AGREGAR
-
-            "price": price,
-
-            #"classification_age": classification_age,
-
-            "requiriments": requiriments    # AGREGAR 2x
-
-        }
     
     else:
         result = {
-            "Não foi possível acessar o site indicado": None
+            "ERROR": "Não foi possível acessar o site indicado"
         }
 
     game_info_json = json.dumps(result, ensure_ascii=False, indent=4)
