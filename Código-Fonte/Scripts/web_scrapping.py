@@ -187,10 +187,35 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
         scroll_to_bottom()
 
-        comments = driver.find_elements(By.ID, 'Reviews_summary')
+        try:
+            reviews_list = []
+            reviews_summary = driver.find_elements(By.ID, 'Reviews_summary')
 
-        # for comment in comments:
-        #    print(comment.text)
+            review_boxes = reviews_summary.find_elements(By.CLASS_NAME, 'review_box   ')
+
+            # Extraia as informações de cada review_box
+            # Não está encontrando as info esperadas e esta caindo no bloco exeption quando não deveria
+            for box in review_boxes:
+                posted_date = box.find_element(By.ID, 'posted_date').text
+                content = box.find_element(By.ID, 'content').text
+                persona_name = box.find_element(By.ID, 'persona_name').text
+                
+                # Crie um dicionário para o review
+                review = {
+                    "posted_date": posted_date,
+                    "content": content,
+                    "persona_name": persona_name
+                }
+                
+                # Adicione o dicionário à lista de reviews
+                reviews_list.append(review)
+
+            # result = {"reviews_summary": reviews_list}
+
+            result["reviews_summary"] = reviews_list
+
+        except AttributeError:
+            result["comments"] = "Não disponível"
 
         driver.quit()
 
