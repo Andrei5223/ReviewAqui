@@ -1,3 +1,6 @@
+### Se precisar:
+### pip install bs4,selenium,webdriver_manager
+
 Backend: 
 npm install -i
     
