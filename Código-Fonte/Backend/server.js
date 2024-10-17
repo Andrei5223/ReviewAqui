@@ -129,7 +129,7 @@ app.post("/login", async (req, res) => {
 app.get("/data", async (req, res) => {
   try {
     const name = req.query.name;
-    console.log("Nome: " + name);
+    // console.log("Nome: " + name);
 
     // Busca o usuário pelo email
     const sources = await db.manyOrNone(
@@ -137,8 +137,7 @@ app.get("/data", async (req, res) => {
       [name]
     );
 
-    console.log("Sources: " + sources);
-    console.log("Sources 0 nome: " + sources[0].nome);
+    // console.log("Sources: " + sources);
 
     if (sources.length === 0) {
       return res.status(400).json({ error: "Produto não encontrado." });
@@ -147,6 +146,7 @@ app.get("/data", async (req, res) => {
     let results = {};
 
     sources.forEach(function(source) {
+      console.log(source.nome)
       let pythonProcess;
     
       if (source.nome === 'STEAM') {
@@ -166,11 +166,16 @@ app.get("/data", async (req, res) => {
       result = pythonProcess.stdout?.toString()?.trim();
       error = pythonProcess.stderr?.toString()?.trim();
     
-      if (!error) {
-        results[source.nome] = JSON.parse(result); 
-      } else {
-        console.log(error);
-        return res.status(500).send(JSON.stringify({ status: 500, message: 'Server error' }));
+      try {
+        if (!error) {
+          results[source.nome] = JSON.parse(result); 
+        } else {
+          console.log(error);
+          return res.status(500).send(JSON.stringify({ status: 500, message: 'Server error' }));
+        }
+      } catch (error) {
+          console.log(error);
+          res.status(400).json({ error: "Erro no servidor." });
       }
     });
     
