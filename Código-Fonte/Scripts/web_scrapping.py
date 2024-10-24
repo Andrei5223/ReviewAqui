@@ -197,30 +197,37 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
         try:
             reviews_list = []
             reviews_summary = driver.find_elements(By.ID, 'Reviews_summary')
-
-            review_boxes = reviews_summary.find_elements(By.CLASS_NAME, 'review_box   ')
-
-            # Extraia as informações de cada review_box
-            # Não está encontrando as info esperadas e esta caindo no bloco exeption quando não deveria
-            for box in review_boxes:
-                posted_date = box.find_element(By.ID, 'posted_date').text
-                content = box.find_element(By.ID, 'content').text
-                persona_name = box.find_element(By.ID, 'persona_name').text
+            for review in reviews_summary:
+                html_content = review.get_attribute('innerHTML')
+                #print(html_content)
+                soup = BeautifulSoup(html_content, 'html.parser')
+                #print(soup)
+                posted_dates = soup.find_all('div', class_='postedDate')
                 
-                # Crie um dicionário para o review
-                review = {
-                    "posted_date": posted_date,
-                    "content": content,
-                    "persona_name": persona_name
-                }
+                contents = soup.find_all('div', class_='content')
+                persona_names = soup.find_all('div', class_='persona_name')
+
+                for i in range(len(posted_dates)):
+                    posted_date = posted_dates[i].text.replace('\t', '').replace('\n', '')
+
+                    content = contents[i].text.replace('\t', '').replace('\n', '')
                 
-                # Adicione o dicionário à lista de reviews
-                reviews_list.append(review)
+                    persona_name = persona_names[i].text.replace('\t', '').replace('\n', '')
+
+                    # Crie um dicionário para o review
+                    review = {
+                        "posted_date": posted_date,
+                        "content": content,
+                        "persona_name": persona_name
+                    }
+                
+                    # Adicione o dicionário à lista de reviews
+                    reviews_list.append(review)
 
             # result = {"reviews_summary": reviews_list}
 
             result["reviews_summary"] = reviews_list
-
+            
         except AttributeError:
             result["comments"] = "Não disponível"
 
@@ -236,6 +243,8 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
     game_info_json = json.dumps(result, ensure_ascii=False, indent=4)
 
     return game_info_json
+
+print(web_scrap_steam())
 
 if sys.argv[1] == 'web_scrap_steam':
     print(web_scrap_steam(url = sys.argv[2]))
