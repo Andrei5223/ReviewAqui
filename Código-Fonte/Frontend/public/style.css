@@ -1,0 +1,16 @@
+header {
+    background: linear-gradient(to left, hsl(147, 96%, 10%), hsl(162, 98%, 36%));
+    color: #fff;
+    text-align: center;
+    padding: 40px;
+    
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 2);
+
+  
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}

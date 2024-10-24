@@ -118,7 +118,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
         <Stack direction="row">
           <Card
             sx={{
-              backgroundColor: '#68fcad',
+              backgroundColor: 'hsl(162, 98%, 36%)',
               minWidth: 250,
               textAlign: 'center',
               display: 'flex',
@@ -188,7 +188,7 @@ export default function Cadastro({handleCloseCadastro, openCadastro, handleOpenL
                   variant="contained"
                   sx={{
                     mt: 2,
-                    backgroundColor: '#68fcad',
+                    backgroundColor: 'hsl(162, 98%, 36%)',
                     color: 'black'
                   }}
                   onClick={handleSubmit}
