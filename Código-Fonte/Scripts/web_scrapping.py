@@ -203,12 +203,11 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
                 soup = BeautifulSoup(html_content, 'html.parser')
                 #print(soup)
                 posted_dates = soup.find_all('div', class_='postedDate')
-                
                 contents = soup.find_all('div', class_='content')
                 persona_names = soup.find_all('div', class_='persona_name')
 
                 for i in range(len(posted_dates)):
-                    posted_date = posted_dates[i].text.replace('\t', '').replace('\n', '')
+                    posted_date = posted_dates[i].text.replace('\t', '').replace('\n', '').replace('Diretamente do Steam', ''). replace('Código do Steam', '')
 
                     content = contents[i].text.replace('\t', '').replace('\n', '')
                 
