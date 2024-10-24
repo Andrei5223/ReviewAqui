@@ -10,6 +10,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg-promise": "^11.9.1",
-    "pgp": "^0.1.0"
+    "pgp": "^0.1.0",
+    "selenium": "^2.20.0"
   }
 }

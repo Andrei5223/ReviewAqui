@@ -9,6 +9,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import Product from "./Product";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/"
               element={<Inicial isLoggedIn={isLoggedIn} userName={userName} />}
+            />
+            <Route
+              path="/teste"
+              element={<Product isLoggedIn={isLoggedIn} userName={userName} />}
             />
           </Routes>
         </Box>
