@@ -120,7 +120,7 @@ export default function Login({
 
             <Button
               variant="contained"
-              sx={{ backgroundColor: "#68fcad", color: "black" }}
+              sx={{ backgroundColor: "hsl(162, 98%, 36%)", color: "black" }}
               onClick={handleChangeToCadastro}
             >
               Cadastrar
@@ -131,7 +131,7 @@ export default function Login({
             component="section"
             sx={{
               p: 2,
-              backgroundColor: "#68fcad",
+              backgroundColor: "hsl(162, 98%, 36%)",
               border: "1px grey",
               maxWidth: 800,
               minWidth: 450,

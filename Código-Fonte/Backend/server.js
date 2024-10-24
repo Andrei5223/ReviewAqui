@@ -187,3 +187,17 @@ app.get("/data", async (req, res) => {
     res.status(400).json({ error: "Erro no servidor." });
   }
 });
+
+app.get("/produto", async (req, res) => {
+  try {
+    const produtos = await db.any(
+      "SELECT p.idp AS id, p.nome, i.link FROM produto p JOIN imagem i ON p.idp = i.idp;"
+    );
+
+    console.log("Retornando todos os produtos.");
+    res.json(produtos).status(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
+});

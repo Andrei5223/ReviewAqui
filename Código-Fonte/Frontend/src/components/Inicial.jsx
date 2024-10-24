@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, Snackbar } from "@mui/material";
+import axios from "axios";
+import { Box, Button, Typography, Snackbar, Grid, Card, CardMedia, CardContent } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
+
 
 export default function Inicial({ isLoggedIn, userName }) {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ export default function Inicial({ isLoggedIn, userName }) {
   const [openLogin, setOpenLogin] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isLoggedInState, setIsLoggedInState] = useState(isLoggedIn);
+  const [Produtos, setProdutos] = useState([]);
 
   const handleOpenCadastro = () => setOpenCadastro(true);
   const handleCloseCadastro = () => setOpenCadastro(false);
@@ -20,7 +23,7 @@ export default function Inicial({ isLoggedIn, userName }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setIsLoggedInState(false); // Atualiza o estado do login
+    setIsLoggedInState(false);
     navigate("/");
     window.location.reload();
   };
@@ -28,9 +31,8 @@ export default function Inicial({ isLoggedIn, userName }) {
   const SessionExpired = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setIsLoggedInState(false); // Atualiza o estado do login
+    setIsLoggedInState(false);
     navigate("/");
-   
   };
 
   const handleSnackbarClose = () => {
@@ -50,78 +52,128 @@ export default function Inicial({ isLoggedIn, userName }) {
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
 
-        // Verifica se o token está expirado
         if (decodedToken.exp < currentTime) {
           handleSessionExpired();
         } else {
-          // Token válido, manter o usuário logado
           setIsLoggedInState(true);
         }
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
-        handleSessionExpired(); // Remove token inválido
+        handleSessionExpired();
       }
     }
   }, []);
 
+
+
+  const fetchProdutosList = async () => {
+    try {
+      const response = await axios.get("http://localhost:3010/produto");
+      setProdutos(response.data);
+    } catch (error) {
+      console.error("Erro ao carregar a lista de produtos", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProdutosList();
+  }, []);
+
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Bem-vindo à Página Inicial{userName ? `, ${userName}` : ""}!
-      </Typography>
-
-      {isLoggedInState ? (
-        <Button
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: "red", color: "white" }}
-          onClick={handleLogout}
-          
+    <div>
+      <header>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          Logout
-        </Button>
-      ) : (
-        <Button variant="outlined" onClick={handleOpenLogin}>
-          Fazer Login
-        </Button>
-      )}
+          <Typography variant="h4" style={{ color: "white", marginRight: "20px" }}>
+            ReviewAki{userName ? `, ${userName}` : ""}!
+          </Typography>
 
-      <Cadastro
-        handleCloseCadastro={handleCloseCadastro}
-        openCadastro={openCadastro}
-        handleOpenLogin={handleOpenLogin}
-      />
+          {isLoggedInState ? (
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: "red", color: "white" }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleOpenLogin} sx={{ backgroundColor: 'hsl(162, 98%, 36%)', padding: 2 }}>
+              Fazer Login
+            </Button>
+          )}
+        </Box>
 
-      <Login
-        handleCloseLogin={handleCloseLogin}
-        openLogin={openLogin}
-        handleOpenCadastro={handleOpenCadastro}
-      />
+        <Cadastro
+          handleCloseCadastro={handleCloseCadastro}
+          openCadastro={openCadastro}
+          handleOpenLogin={handleOpenLogin}
+        />
 
-      <Snackbar
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-        message="Sessão expirada. Faça login novamente."
-        action={
-          <Button
-            color="inherit"
-            onClick={() => {
-              handleCloseLogin();
-              handleOpenLogin();
-              handleSnackbarClose();
-            }}
-          >
-            Continuar
-          </Button>
-        }
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Centraliza horizontalmente
-        sx={{
-          // Adiciona margem para centralizar verticalmente
-          "& .MuiSnackbarContent-root": {
-            display: "flex",
-            justifyContent: "center",
-          },
-        }}
-      />
-    </Box>
+        <Login
+          handleCloseLogin={handleCloseLogin}
+          openLogin={openLogin}
+          handleOpenCadastro={handleOpenCadastro}
+        />
+
+        <Snackbar
+          open={snackbarOpen}
+          onClose={handleSnackbarClose}
+          message="Sessão expirada. Faça login novamente."
+          action={
+            <Button
+              color="inherit"
+              onClick={() => {
+                handleCloseLogin();
+                handleOpenLogin();
+                handleSnackbarClose();
+              }}
+            >
+              Continuar
+            </Button>
+          }
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          sx={{
+            "& .MuiSnackbarContent-root": {
+              display: "flex",
+              justifyContent: "center",
+            },
+          }}
+        />
+      </header>
+      <body>
+        <Grid style={{ marginTop: "20px" }} container spacing={5}>
+          {Produtos.map((produto) =>
+
+            <Grid item key={produto.idp} xs={12} sm={6} md={3}>
+              <Card style={{ margin: "10px" }}>
+                <CardMedia
+                  component="img"
+                  alt={produto.nome}
+                  height="250"
+                  image={produto.link}
+                />
+
+                <CardContent>
+                  <Typography variant="h6">{produto.nome}</Typography>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: 'hsl(162, 98%, 36%)',
+                    }}
+                  // onClick={() => redicionar para pagina do produto}
+                  >
+                    Ver produto
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+
+          )}
+        </Grid>
+      </body>
+    </div>
   );
 }
