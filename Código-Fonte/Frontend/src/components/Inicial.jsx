@@ -88,13 +88,13 @@ export default function Inicial({ isLoggedIn, userName }) {
           alignItems="center"
         >
           <Typography variant="h4" style={{ color: "white", marginRight: "20px" }}>
-            ReviewAki{userName ? `, ${userName}` : ""}!
+            ReviewAki!
           </Typography>
 
           {isLoggedInState ? (
             <Button
               variant="contained"
-              sx={{ backgroundColor: "red", color: "white" }}
+              sx={{ backgroundColor: "red", padding: 2 }}
               onClick={handleLogout}
             >
               Logout
