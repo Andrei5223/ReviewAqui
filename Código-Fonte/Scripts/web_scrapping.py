@@ -243,7 +243,7 @@ def web_scrap_steam(url: str = 'https://store.steampowered.com/app/2322010/God_o
 
     return game_info_json
 
-print(web_scrap_steam())
+# print(web_scrap_steam())
 
 if sys.argv[1] == 'web_scrap_steam':
     print(web_scrap_steam(url = sys.argv[2]))

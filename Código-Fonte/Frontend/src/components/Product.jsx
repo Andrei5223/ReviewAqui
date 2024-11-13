@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Typography, List, ListItem, ListItemText, CircularProgress, Card, CardMedia, CardContent } from '@mui/material';
 
-const Product = () => {
+const Product = ({nome}) => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const Product = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3010/data?name=ELDEN%20RING');
+        const response = await axios.get(`http://localhost:3010/data?name=${encodeURIComponent(nome)}`);
         setData(response.data);
       } catch (err) {
         setError(err);
@@ -19,8 +19,10 @@ const Product = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (nome) { // Garante que "nome" existe antes de fazer a requisição
+      fetchData();
+    }
+  }, [nome]);
 
   if (loading) {
     return <CircularProgress />;

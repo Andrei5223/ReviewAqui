@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
+import Product from "./Product";
 
 
 export default function Inicial({ isLoggedIn, userName }) {
@@ -19,6 +20,13 @@ export default function Inicial({ isLoggedIn, userName }) {
   const handleCloseCadastro = () => setOpenCadastro(false);
   const handleOpenLogin = () => setOpenLogin(true);
   const handleCloseLogin = () => setOpenLogin(false);
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Função para mostrar o componente Product ao clicar em "Ver produto"
+  const handleViewProduct = (produto) => {
+    setSelectedProduct(produto);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -144,9 +152,12 @@ export default function Inicial({ isLoggedIn, userName }) {
         />
       </header>
       <body>
+      {selectedProduct ? (
+        // Renderiza o componente Product com o produto selecionado como parâmetro
+        <Product nome={selectedProduct.nome} />
+      ) : (
         <Grid style={{ marginTop: "20px" }} container spacing={5}>
-          {Produtos.map((produto) =>
-
+          {Produtos.map((produto) => (
             <Grid item key={produto.idp} xs={12} sm={6} md={3}>
               <Card style={{ margin: "10px" }}>
                 <CardMedia
@@ -155,7 +166,6 @@ export default function Inicial({ isLoggedIn, userName }) {
                   height="250"
                   image={produto.link}
                 />
-
                 <CardContent>
                   <Typography variant="h6">{produto.nome}</Typography>
                   <Button
@@ -163,16 +173,16 @@ export default function Inicial({ isLoggedIn, userName }) {
                     sx={{
                       backgroundColor: 'hsl(162, 98%, 36%)',
                     }}
-                  // onClick={() => redicionar para pagina do produto}
+                    onClick={() => handleViewProduct(produto)}
                   >
                     Ver produto
                   </Button>
                 </CardContent>
               </Card>
             </Grid>
-
-          )}
+          ))}
         </Grid>
+      )}
       </body>
     </div>
   );

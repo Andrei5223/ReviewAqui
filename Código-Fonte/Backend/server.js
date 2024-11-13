@@ -128,8 +128,9 @@ app.post("/login", async (req, res) => {
 // Get data
 app.get("/data", async (req, res) => {
   try {
+    console.log("/data");
     const name = req.query.name;
-    // console.log("Nome: " + name);
+    console.log("Nome: " + name);
 
     // Busca o usuário pelo email
     const sources = await db.manyOrNone(
