@@ -95,7 +95,8 @@ export default function Inicial({ isLoggedIn, userName }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h4" style={{ color: "white", marginRight: "20px" }}>
+          <img src={'/img/logo.png'} style={{ maxWidth: 70, maxHeight: 70, position: "absolute" }}/>
+          <Typography variant="h4" style={{ color: "white", marginRight: "20px", marginLeft: "80px" }}>
             ReviewAki!
           </Typography>
 
