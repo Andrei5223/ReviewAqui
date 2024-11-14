@@ -7,10 +7,11 @@ import {
   Card, 
   CardMedia, 
   CardContent, 
-  Box 
+  Box, 
+  Button
 } from '@mui/material';
 
-const Product = ({ nome }) => {
+const Product = ({ nome, handleViewProduct }) => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,6 +56,7 @@ const Product = ({ nome }) => {
       </Typography>
 
       {/* Card para Steam */}
+      {steamData.description && (
       <Card sx={{ marginBottom: 2, display: 'flex', flexDirection: 'column', padding: 2 }}>
         <CardMedia
           component="img"
@@ -112,6 +114,7 @@ const Product = ({ nome }) => {
     </CardContent>
         </Box>
       </Card>
+      )}
 
       {/* Card para Amazon (caso exista dados) */}
       {amazonData.description && (
@@ -162,6 +165,17 @@ const Product = ({ nome }) => {
     </Box>
   </Card>
 )}
+
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: 'hsl(162, 98%, 36%)',
+        marginBottom: "10px"
+      }}
+      onClick={() => handleViewProduct(null)}
+    >
+      Voltar ao início
+    </Button>
 
     </Container>
   );

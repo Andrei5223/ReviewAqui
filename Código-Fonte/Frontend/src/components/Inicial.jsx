@@ -155,7 +155,7 @@ export default function Inicial({ isLoggedIn, userName }) {
       <body>
       {selectedProduct ? (
         // Renderiza o componente Product com o produto selecionado como parâmetro
-        <Product nome={selectedProduct.nome} />
+        <Product nome={selectedProduct.nome} handleViewProduct={handleViewProduct} />
       ) : (
         <Grid style={{ marginTop: "20px" }} container spacing={5}>
           {Produtos.map((produto) => (
