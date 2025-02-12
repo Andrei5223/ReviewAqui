@@ -3,10 +3,12 @@ pip install bs4, selenium, webdriver_manager
 
 ### Backend: 
 npm install -i
+
 nodemon server.js
 
 ### Frontend:
 npm install -i
+
 npm start
 
 ### Banco de dados
